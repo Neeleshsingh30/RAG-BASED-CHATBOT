@@ -27,3 +27,4 @@ unstructured>=0.15.0
 ragas>=0.1.9
 datasets>=2.20.0
 langchain-huggingface
+langchain-chroma
