@@ -1,0 +1,52 @@
+[
+  {
+    "question": "What are the three foundational pillars of a Large Language Model (LLM)?",
+    "ground_truth": "The three foundational pillars of an LLM are data, architecture, and training. Data determines the model's knowledge and capabilities, the architecture provides the underlying structure, often based on Transformers, and training adjusts the model's internal parameters to minimize prediction errors.",
+    "source": "Generative_AI_Book.pdf, page 25"
+  },
+  {
+    "question": "How does Retrieval Augmented Generation (RAG) work?",
+    "ground_truth": "RAG first takes the user's query and converts it into a vector using an embedding model. A vector database then retrieves relevant document contexts based on vector similarity, and these retrieved contexts are provided to the LLM along with the original query so it can generate a more context-aware response.",
+    "source": "Generative_AI_Book.pdf, page 33"
+  },
+  {
+    "question": "Why is chunking important in a RAG system?",
+    "ground_truth": "Chunking divides a large corpus of documents into smaller, manageable pieces that can be efficiently retrieved and processed. Properly sized chunks can make the RAG pipeline more efficient, productive, and accurate.",
+    "source": "Generative_AI_Book.pdf, page 35"
+  },
+  {
+    "question": "What is the difference between naive chunking and semantic chunking?",
+    "ground_truth": "Naive chunking splits text at regular intervals, such as every fixed number of characters, without considering words or sentence boundaries. Semantic chunking considers sentence construction and splits the text based on meaningful sentence boundaries.",
+    "source": "Generative_AI_Book.pdf, page 35"
+  },
+  {
+    "question": "What is the purpose of vector embeddings in generative AI applications?",
+    "ground_truth": "Vector embeddings transform text or other data into numerical vectors that capture semantic meaning in a high-dimensional space. These representations allow systems such as vector databases to compare and retrieve information based on meaning rather than only exact keywords.",
+    "source": "Generative_AI_Book.pdf, pages 38-42"
+  },
+  {
+    "question": "How does a vector database perform semantic search?",
+    "ground_truth": "A vector database converts data points into high-dimensional vectors and indexes them for efficient search. When a query is converted into a vector, similarity techniques such as cosine similarity, L2 distance, or nearest-neighbor search are used to find and rank the most similar data points.",
+    "source": "Generative_AI_Book.pdf, page 42"
+  },
+  {
+    "question": "Why can Retrieval Augmented Generation help reduce LLM hallucinations?",
+    "ground_truth": "RAG provides the LLM with an external knowledge source by retrieving relevant documents and using them as additional context for generating the response. This can make outputs more context-aware, tailored, and reliable.",
+    "source": "Generative_AI_Book.pdf, pages 32-34"
+  },
+  {
+    "question": "What is the role of prompt engineering in Generative AI?",
+    "ground_truth": "Prompt engineering involves carefully crafting instructions and providing relevant context to guide an LLM toward a desired output. Clear instructions, appropriate context, prompting techniques, and iterative refinement can improve the quality and relevance of the generated response.",
+    "source": "Generative_AI_Book.pdf, page 51"
+  },
+  {
+    "question": "How is LlamaIndex useful when building applications with private or domain-specific data?",
+    "ground_truth": "LlamaIndex acts as a bridge between LLMs and private or domain-specific data. It can ingest and organize sources such as APIs, databases, and PDFs, index the information in formats optimized for LLMs, and enable natural-language querying without requiring the model to be retrained.",
+    "source": "Generative_AI_Book.pdf, page 46"
+  },
+  {
+    "question": "What are multimodal models and what types of information can they process?",
+    "ground_truth": "Multimodal models are AI systems designed to understand, interpret, or generate information from multiple modalities. These can include text, images, audio, and video, allowing the model to correlate information across different data types and gain broader context.",
+    "source": "Generative_AI_Book.pdf, page 56"
+  }
+]
