@@ -26,9 +26,21 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - - name: Run RAG evaluation
-          env:
-            OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-            HF_TOKEN: ${{ secrets.HF_TOKEN }}
-          run: |
-            python -m evaluation.evaluate
+      - name: Run RAG evaluation
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          python -m evaluation.evaluate
+
+      - name: Build backend Docker image
+        run: |
+          docker build \
+            -f Dockerfile.backend \
+            -t rag-backend:ci .
+
+      - name: Build frontend Docker image
+        run: |
+          docker build \
+            -f Dockerfile.frontend \
+            -t rag-frontend:ci .

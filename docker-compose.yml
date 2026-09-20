@@ -1,0 +1,19 @@
+services:
+
+  backend:
+    image: project_rag-backend:v2
+    container_name: project-rag-backend
+    env_file:
+      - .env
+    ports:
+      - "8001:8000"
+
+  frontend:
+    image: project_rag-frontend:v2
+    container_name: project-rag-frontend
+    environment:
+      BACKEND_URL: http://backend:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
