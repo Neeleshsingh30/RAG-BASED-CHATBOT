@@ -26,8 +26,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run RAG evaluation
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          python -m evaluation.evaluate
+      - - name: Run RAG evaluation
+          env:
+            OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+            HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          run: |
+            python -m evaluation.evaluate
