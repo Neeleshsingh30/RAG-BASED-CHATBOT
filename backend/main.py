@@ -3,19 +3,19 @@ Only routing/wiring lives here. All RAG logic (routing decision, retrieval,
 prompt, model, structured parsing) is imported from routing/, retrieval/,
 and generation/ — this file just plugs them together behind one endpoint.
 """
-# ruff: noqa: E402
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from routing.query_router import classify_query
-from retrieval.retriever import get_retriever
 from generation.llm import get_llm
-from generation.prompt import RAG_PROMPT, GENERAL_PROMPT
-from generation.parser import answer_parser, AnswerSchema
+from generation.parser import AnswerSchema, answer_parser
+from generation.prompt import GENERAL_PROMPT, RAG_PROMPT
+from retrieval.retriever import get_retriever
+from routing.query_router import classify_query
 
 app = FastAPI(title="RAG Teaching API")
 

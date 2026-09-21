@@ -4,16 +4,17 @@ talks to the FastAPI backend over HTTP and renders whatever JSON comes back.
 """
 
 import os
+
 import requests
 import streamlit as st
+
 
 def _get_backend_url() -> str:
     # Local runs read from .env (via os.getenv). Streamlit Community Cloud
     # runs read from the app's Secrets instead, exposed through st.secrets.
-    try:
-        return st.secrets["BACKEND_URL"]
-    except Exception:
-        return os.getenv("BACKEND_URL", "http://localhost:8000")
+    return st.secrets.get(
+        "BACKEND_URL", os.getenv("BACKEND_URL", "http://localhost:8000")
+    )
 
 
 BACKEND_URL = _get_backend_url()

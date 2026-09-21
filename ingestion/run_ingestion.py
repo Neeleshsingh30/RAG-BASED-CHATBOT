@@ -10,11 +10,12 @@ resolve correctly):
 """
 
 import os
+
 from dotenv import load_dotenv
 
+from ingestion.embed_store import build_vectorstore
 from ingestion.loader import load_documents
 from ingestion.splitter import split_into_chunks
-from ingestion.embed_store import build_vectorstore
 
 
 def main():

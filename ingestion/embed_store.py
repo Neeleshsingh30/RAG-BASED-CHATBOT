@@ -3,11 +3,10 @@ Separated so "which embedding model" and "which vector DB" are decided in
 exactly one place — everything else just calls build_vectorstore() or
 get_vectorstore() and doesn't care how embeddings actually happen.
 """
-from typing import Optional
 import os
-from langchain_huggingface import HuggingFaceEndpointEmbeddings
-from langchain_chroma import Chroma
 
+from langchain_chroma import Chroma
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 
 _embeddings = None  # cached after first load, reused for every later request
 
@@ -32,7 +31,7 @@ def _get_embeddings():
 
 
 # def build_vectorstore(chunks, persist_dir: str = None):
-def build_vectorstore(chunks, persist_dir: Optional[str] = None):
+def build_vectorstore(chunks, persist_dir: str | None = None):
     persist_dir = persist_dir or os.getenv("CHROMA_PERSIST_DIR", "vectorstore/chroma_db")
     embeddings = _get_embeddings()
 
@@ -58,7 +57,7 @@ def build_vectorstore(chunks, persist_dir: Optional[str] = None):
 
 
 
-def get_vectorstore(persist_dir: Optional[str] = None):
+def get_vectorstore(persist_dir: str | None = None):
     persist_dir = (
         persist_dir
         or os.getenv("CHROMA_PERSIST_DIR")

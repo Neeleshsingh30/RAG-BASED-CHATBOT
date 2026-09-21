@@ -33,9 +33,10 @@ Single place that decides which chat model/config to use â€” prompt.py,
 routing, and the backend all just call get_llm() and don't care about
 model specifics.
 """
-from pydantic import SecretStr
 import os
+
 from langchain_openai import ChatOpenAI
+from pydantic import SecretStr
 
 
 def get_llm(temperature: float = 0.2):

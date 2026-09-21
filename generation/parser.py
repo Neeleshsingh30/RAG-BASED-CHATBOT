@@ -4,9 +4,9 @@ prompt.py can inject format instructions and the backend can validate the
 model's output without duplicating the schema anywhere else.
 """
 
-from typing import List
-from pydantic import BaseModel, Field
+
 from langchain_core.output_parsers import PydanticOutputParser
+from pydantic import BaseModel, Field
 
 
 class Citation(BaseModel):
@@ -16,7 +16,7 @@ class Citation(BaseModel):
 
 class AnswerSchema(BaseModel):
     answer: str = Field(description="The final answer to the user's question")
-    citations: List[Citation] = Field(
+    citations: list[Citation] = Field(
         default_factory=list,
         description="Sources used to produce the answer. Empty list for general/non-document answers.",
     )

@@ -5,24 +5,28 @@ without touching retrieval or generation code.
 """
 
 import os
-from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
 
-ROUTER_PROMPT = ChatPromptTemplate.from_messages([
-    "system",
-     "You are a strict query classifier for a RAG system with an internal "
-     "knowledge base. Reply with exactly one word: 'general' or 'document'.\n\n"
-     "- 'general' = ONLY pure greetings, small talk, or meta questions about "
-     "the assistant itself (e.g. 'hi', 'thanks', 'what can you do').\n"
-     "- 'document' = ANY substantive, factual, or technical question — even "
-     "if you personally already know the answer. Default to 'document' "
-     "whenever there is any chance the knowledge base has relevant "
-     "information.\n\n"
-     "Reply with only the single word, nothing else.",
-    ("human", "{query}"),
-    
-])
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI
+
+ROUTER_PROMPT = ChatPromptTemplate.from_messages(
+    [
+        "system",
+        (
+            "You are a strict query classifier for a RAG system with an internal "
+            "knowledge base. Reply with exactly one word: 'general' or 'document'.\n\n"
+            "- 'general' = ONLY pure greetings, small talk, or meta questions about "
+            "the assistant itself (e.g. 'hi', 'thanks', 'what can you do').\n"
+            "- 'document' = ANY substantive, factual, or technical question — even "
+            "if you personally already know the answer. Default to 'document' "
+            "whenever there is any chance the knowledge base has relevant "
+            "information.\n\n"
+            "Reply with only the single word, nothing else."
+        ),
+        ("human", "{query}"),
+    ]
+)
 
 
 # Built lazily (on first real call) so this module can be imported before

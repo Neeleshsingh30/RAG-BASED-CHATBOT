@@ -111,17 +111,16 @@ Run from the project root:
 import json
 
 from dotenv import load_dotenv
-
-from ragas import SingleTurnSample, EvaluationDataset, evaluate
-from ragas.metrics import Faithfulness, AnswerRelevancy, ContextPrecision
-from ragas.llms import LangchainLLMWrapper
+from ragas import EvaluationDataset, SingleTurnSample, evaluate
 from ragas.embeddings import LangchainEmbeddingsWrapper
+from ragas.llms import LangchainLLMWrapper
+from ragas.metrics import AnswerRelevancy, ContextPrecision, Faithfulness
 
-from retrieval.retriever import get_retriever
 from generation.llm import get_llm
-from generation.prompt import RAG_PROMPT
 from generation.parser import answer_parser
+from generation.prompt import RAG_PROMPT
 from ingestion.embed_store import _get_embeddings
+from retrieval.retriever import get_retriever
 
 
 def load_testset(path: str = "evaluation/testset.json"):

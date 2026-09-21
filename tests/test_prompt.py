@@ -1,4 +1,4 @@
-from generation.prompt import RAG_PROMPT, GENERAL_PROMPT
+from generation.prompt import GENERAL_PROMPT, RAG_PROMPT
 
 
 def test_rag_prompt_contains_context_and_question():

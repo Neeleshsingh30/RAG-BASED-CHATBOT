@@ -72,8 +72,8 @@ from typing import Any
 
 from langchain_community.document_loaders import (
     DirectoryLoader,
-    TextLoader,
     PyPDFLoader,
+    TextLoader,
 )
 
 # Map file extensions to the LangChain loader class that knows how to read them.
