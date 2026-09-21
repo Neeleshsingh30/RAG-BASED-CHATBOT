@@ -3,6 +3,7 @@ Only routing/wiring lives here. All RAG logic (routing decision, retrieval,
 prompt, model, structured parsing) is imported from routing/, retrieval/,
 and generation/ — this file just plugs them together behind one endpoint.
 """
+# ruff: noqa: E402
 
 from dotenv import load_dotenv
 load_dotenv()
