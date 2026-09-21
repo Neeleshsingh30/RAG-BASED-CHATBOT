@@ -3,7 +3,7 @@ Separated so "which embedding model" and "which vector DB" are decided in
 exactly one place — everything else just calls build_vectorstore() or
 get_vectorstore() and doesn't care how embeddings actually happen.
 """
-
+from typing import Optional
 import os
 from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from langchain_chroma import Chroma
@@ -31,7 +31,8 @@ def _get_embeddings():
     return _embeddings
 
 
-def build_vectorstore(chunks, persist_dir: str = None):
+# def build_vectorstore(chunks, persist_dir: str = None):
+def build_vectorstore(chunks, persist_dir: Optional[str] = None):
     persist_dir = persist_dir or os.getenv("CHROMA_PERSIST_DIR", "vectorstore/chroma_db")
     embeddings = _get_embeddings()
 
@@ -43,12 +44,36 @@ def build_vectorstore(chunks, persist_dir: str = None):
     return vectorstore
 
 
-def get_vectorstore(persist_dir: str = None):
-    persist_dir = persist_dir or os.getenv("CHROMA_PERSIST_DIR", "vectorstore/chroma_db")
+# def get_vectorstore(persist_dir: str = None):
+# def get_vectorstore(persist_dir: Optional[str] = None):
+#     persist_dir = persist_dir or os.getenv("CHROMA_PERSIST_DIR", "vectorstore/chroma_db")
+#     if not os.path.isdir(persist_dir):
+#         raise FileNotFoundError(
+#             f"No vector store found at '{persist_dir}'. "
+#             "Run `python -m ingestion.run_ingestion` first."
+#         )
+#     embeddings = _get_embeddings()
+#     return Chroma(persist_directory=persist_dir, embedding_function=embeddings)
+
+
+
+
+def get_vectorstore(persist_dir: Optional[str] = None):
+    persist_dir = (
+        persist_dir
+        or os.getenv("CHROMA_PERSIST_DIR")
+        or "vectorstore/chroma_db"
+    )
+
     if not os.path.isdir(persist_dir):
         raise FileNotFoundError(
             f"No vector store found at '{persist_dir}'. "
             "Run `python -m ingestion.run_ingestion` first."
         )
+
     embeddings = _get_embeddings()
-    return Chroma(persist_directory=persist_dir, embedding_function=embeddings)
+
+    return Chroma(
+        persist_directory=persist_dir,
+        embedding_function=embeddings,
+    )

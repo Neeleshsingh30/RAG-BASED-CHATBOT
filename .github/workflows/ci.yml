@@ -9,7 +9,9 @@ on:
       - main
 
 jobs:
-  rag-evaluation:
+
+  # ── Stage 1: Lint ────────────────────────────────────────────────────────────
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,6 +22,127 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install ruff
+
+      - name: Run Ruff
+        run: |
+          ruff check .
+
+
+  # ── Stage 2: Type Check ──────────────────────────────────────────────────────
+  typecheck:
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install mypy
+
+      - name: Run MyPy
+        run: |
+          mypy backend ingestion retrieval routing generation evaluation
+
+
+  # ── Stage 3: Secrets Scan ────────────────────────────────────────────────────
+  secrets-scan:
+    runs-on: ubuntu-latest
+    needs: typecheck
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install detect-secrets
+        run: |
+          python -m pip install detect-secrets==1.5.0
+
+      - name: Scan repository for secrets
+        run: |
+          python -m detect_secrets scan > current-secrets.json
+
+      - name: Validate secret scan
+        run: |
+          python -c "
+          import json
+          import sys
+
+          with open('current-secrets.json', encoding='utf-8') as f:
+              data = json.load(f)
+
+          results = data.get('results', {})
+
+          if results:
+              print('Potential secrets detected:')
+              print(json.dumps(results, indent=2))
+              sys.exit(1)
+
+          print('No secrets detected.')
+          "
+
+
+  # ── Stage 4: Tests ───────────────────────────────────────────────────────────
+  test:
+    runs-on: ubuntu-latest
+    needs: secrets-scan
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run tests
+        run: |
+          pytest -q
+
+
+  # ── Stage 5: RAG Evaluation ──────────────────────────────────────────────────
+  rag-evaluation:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
 
       - name: Install dependencies
         run: |
@@ -34,6 +157,16 @@ jobs:
         run: |
           python -m evaluation.evaluate
 
+
+  # ── Stage 6: Docker Build ─────────────────────────────────────────────────────
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: rag-evaluation
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Build backend Docker image
         run: |
           docker build \
@@ -45,3 +178,8 @@ jobs:
           docker build \
             -f Dockerfile.frontend \
             -t rag-frontend:ci .
+
+      - name: Verify Docker images
+        run: |
+          docker images rag-backend:ci
+          docker images rag-frontend:ci
